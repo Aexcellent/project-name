@@ -1,9 +1,10 @@
 import xlwt
-import pymysql
+import mysqlclient
 
-conn=pymysql.connect(host='localhost',user='root',passwd='××××',db='test')
+def excel_dc(table_name):
+conn=mysqlclient.connect(host='localhost',user='root',passwd='××××',db='test')
 cursor=conn.cursor()
-count = cursor.execute('select * from test1')
+count = cursor.execute('select * from '+table_name)
 
 print ('has %s record'% count)
 
@@ -15,7 +16,7 @@ results = cursor.fetchall()   #搜取所有结果 results=[[],[]]  len(results)�
 fields = cursor.description      #得到字段名称 field=[[],[],[]]
 
 wbk = xlwt.Workbook()      #创建工作簿
-sheet = wbk.add_sheet('test1',cell_overwrite_ok=True)  #创建sheet
+sheet = wbk.add_sheet('sheet1',cell_overwrite_ok=True)  #创建sheet
 for ifs in range(0,len(fields)):
     sheet.write(0,ifs,fields[ifs][0])  #将字段写入到EXCEL新表的第一行
 ics=1
@@ -23,4 +24,4 @@ jcs=0
 for ics in range(1,len(results)+1):   #从第二行开始写
     for jcs in range(0,len(fields)):
         sheet.write(ics,jcs,results[ics-1][jcs])
-wbk.save('×××××/Desktop/test4.xlsx')
+wbk.save('×××××/Desktop/'+table_name+'.xlsx')
